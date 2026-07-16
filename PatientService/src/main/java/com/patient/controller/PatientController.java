@@ -154,10 +154,14 @@ public class PatientController {
      * @return ApiResponse containing the list of ClaimRequest objects and a success message.
      */
     @GetMapping("/getClaims")
-    public ApiResponse<List<ClaimRequest>> getClaimByPatientId(@RequestHeader String userId) {
-    	long patientId = Long.parseLong(userId);
+    public ApiResponse<List<ClaimRequest>> getClaimByPatientId(@RequestHeader("userId") String userId) {
+
+        long patientId = Long.parseLong(userId);
         List<ClaimRequest> claimList = patSer.getClaimsByPatientId(patientId);
-        return new ApiResponse<>(HttpStatus.OK, "Successful retrieval of claims list", claimList);
+        return new ApiResponse<>(
+                HttpStatus.OK,
+                "Successful retrieval of claims list",
+                claimList);
     }
 
     /**

@@ -54,7 +54,7 @@ public class InsuranceCompanyController {
 	 *         success message.
 	 */
 	@PostMapping("/signup")
-	public ApiResponse<InsuranceCompanyDTO> registerPatient(@RequestBody InsuranceCompany insuranceCompany) {
+	public ApiResponse<InsuranceCompanyDTO> registerInsuranceComapny(@RequestBody InsuranceCompany insuranceCompany) {
 		InsuranceCompanyDTO registeredCompany = icSer.registerInsuranceCompany(insuranceCompany);
 		return new ApiResponse<>(HttpStatus.CREATED, "Insurance company registered successfully", registeredCompany);
 	}

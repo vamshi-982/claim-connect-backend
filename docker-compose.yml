@@ -1,0 +1,16 @@
+services:
+  eurekaserver:
+    build:
+      context: ./EurekaServer
+    container_name: eurekaserver
+    ports:
+      - "8761:8761"
+
+  configserver:
+    build:
+      context: ./ConfigServer
+    container_name: configserver
+    ports:
+      - "1234:1234"
+    depends_on:
+      - eurekaserver

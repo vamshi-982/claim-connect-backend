@@ -151,13 +151,12 @@ public class PatientServiceImpl implements PatientService {
 	 */
 	@Override
 	public List<ClaimRequest> getClaimsByPatientId(long patientId) {
-		// long loggedInUserId = 1; // hardcode
-		log.info("Fetching claims by patient id: {}", patientId);
-		Patient existingPatient = patRepo.findById(patientId).orElse(null);
-		if (existingPatient != null) {
-			return crClient.getClaimsByPatientId(patientId);
-		}
-		throw new ResourceNotFoundException();
+
+
+	    Patient existingPatient = patRepo.findById(patientId).orElse(null);
+	    List<ClaimRequest> claims = crClient.getClaimsByPatientId(patientId);
+
+	    return claims;
 	}
 
 	/**
