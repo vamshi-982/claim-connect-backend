@@ -9,7 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class PatientServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PatientServiceApplication.class, args);
+
+	SpringApplication.run(PatientServiceApplication.class, args);
 	}
 
 }
