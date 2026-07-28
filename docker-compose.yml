@@ -1,10 +1,20 @@
+version: "3.9"
+
 services:
-  eurekaserver:
-    build:
-      context: ./EurekaServer
-    container_name: eurekaserver
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: claim_connect
     ports:
-      - "8761:8761"
+      - "3308:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - claim-network
 
   configserver:
     build:
@@ -13,4 +23,81 @@ services:
     ports:
       - "1234:1234"
     depends_on:
+      - mysql
+    networks:
+      - claim-network
+
+  eurekaserver:
+    build:
+      context: ./EurekaServer
+    container_name: eurekaserver
+    ports:
+      - "8761:8761"
+    depends_on:
+      - configserver
+    networks:
+      - claim-network
+
+  hospitalservice:
+    build:
+      context: ./HospitalService
+    container_name: hospitalservice
+    ports:
+      - "2000:2000"
+    depends_on:
       - eurekaserver
+    networks:
+      - claim-network
+
+  claimrequestservice:
+    build:
+      context: ./ClaimRequestService
+    container_name: claimrequestservice
+    ports:
+      - "2001:2001"
+    depends_on:
+      - eurekaserver
+    networks:
+      - claim-network
+
+  patientservice:
+    build:
+      context: ./PatientService
+    container_name: patientservice
+    ports:
+      - "2002:2002"
+    depends_on:
+      - eurekaserver
+    networks:
+      - claim-network
+
+  insurancecompanyservice:
+    build:
+      context: ./InsuranceCompanyService
+    container_name: insurancecompanyservice
+    ports:
+      - "2003:2003"
+    depends_on:
+      - eurekaserver
+    networks:
+      - claim-network
+
+  apigateway:
+    build:
+      context: ./ApiGateWay
+    container_name: apigateway
+    ports:
+      - "3434:3434"
+    depends_on:
+      - patientservice
+      - hospitalservice
+      - insurancecompanyservice
+      - claimrequestservice
+    networks:
+      - claim-network
+
+networks:
+  claim-network:
+
+volumes:
+  mysql-data:
